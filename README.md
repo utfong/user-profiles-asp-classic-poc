@@ -16,3 +16,7 @@ Each host needs to be bound as its own IIS site/virtual host with the Classic AS
 `asp-classic.code-workspace` opens both folders together in VS Code.
 
 For AI assistants working in this repo: see [`CLAUDE.md`](CLAUDE.md) for environment gotchas discovered while building the vbscript host that will very likely resurface building others.
+
+## Author
+
+UT Fong ([utfong@gmail.com](mailto:utfong@gmail.com))
