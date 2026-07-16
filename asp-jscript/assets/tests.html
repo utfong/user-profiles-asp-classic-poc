@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>JS Test Results</title>
+<style>
+	body {
+		font-family: Consolas, Menlo, monospace;
+		background: #0b0f19;
+		color: #e4e7ec;
+		padding: 24px;
+	}
+	h1 {
+		font-size: 1.15rem;
+	}
+	.pass {
+		color: #4ade80;
+	}
+	.fail {
+		color: #f87171;
+	}
+	.summary {
+		font-weight: bold;
+		margin-top: 16px;
+		font-size: 1.1rem;
+		padding: 10px 14px;
+		border-radius: 6px;
+		display: inline-block;
+	}
+	.summary.pass {
+		background: #0f2a1c;
+	}
+	.summary.fail {
+		background: #3a1414;
+	}
+</style>
+</head>
+<body>
+	<h1>asp-jscript frontend (app.core.js) - JS Test Results</h1>
+	<div id="report">Running&hellip;</div>
+
+	<!-- Real markup for runConfirmControllerTests() to drive - kept off the
+	     visible page so a manual visit here doesn't flash a dialog, but
+	     still a real connected <dialog> so showModal()/close() behave for real. -->
+	<dialog id="testConfirmDialog" style="position: absolute; top: -9999px; left: -9999px;">
+		<p id="testConfirmMessage"></p>
+		<button type="button" id="testConfirmCancel">Cancel</button>
+		<button type="button" id="testConfirmDelete">Delete</button>
+	</dialog>
+
+	<script src="testing.js"></script>
+	<script src="app.core.js"></script>
+	<script src="tests.core.js"></script>
+</body>
+</html>

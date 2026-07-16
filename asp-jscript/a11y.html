@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Accessibility Check</title>
+</head>
+<body>
+<script>
+	// Fetches the live index.html (rather than duplicating its markup here,
+	// which would drift out of sync) and rewrites this document with it,
+	// plus a small report panel + axe-core, appended right before </body>
+	// so they run after index.html's own scripts have already wired up the
+	// app. Lives at the site root (not assets/) so index.html's relative
+	// asset paths ("assets/app.css" etc.) still resolve correctly once
+	// they're running under this page's URL.
+	fetch("index.html")
+		.then(function (res) { return res.text(); })
+		.then(function (html) {
+			var extra =
+				'<style>' +
+				'#a11yReport{font-family:Consolas,Menlo,monospace;white-space:pre-wrap;' +
+				'padding:16px;margin:24px 0;border-radius:8px;background:#f2f4f7;color:#101828;}' +
+				'#a11yReport.pass{background:#ecfdf3;color:#166534;}' +
+				'#a11yReport.fail{background:#fef3f2;color:#991b1b;}' +
+				'@media (prefers-color-scheme: dark){#a11yReport{background:#1a2030;color:#e4e7ec;}' +
+				'#a11yReport.pass{background:#0f2a1c;color:#4ade80;}' +
+				'#a11yReport.fail{background:#3a1414;color:#f87171;}}' +
+				'</style>' +
+				'<div id="a11yReport">Running accessibility scan&hellip;</div>' +
+				'<script src="https://cdn.jsdelivr.net/npm/axe-core@4/axe.min.js"><\/script>' +
+				'<script src="assets/a11y.run.js"><\/script>';
+			document.open();
+			document.write(html.replace("</body>", extra + "</body>"));
+			document.close();
+		})
+		.catch(function (err) {
+			document.body.textContent = "Failed to load index.html: " + err.message;
+		});
+</script>
+</body>
+</html>

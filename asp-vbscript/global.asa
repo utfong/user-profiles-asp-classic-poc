@@ -1,0 +1,23 @@
+<script language="VBScript" runat="server">
+
+' Safety-net cleanup: if a session ends via idle timeout (Session.Timeout is
+' set short in api/session.asp for demo purposes) rather than the explicit
+' "End Session" call, delete its .accdb here. Global.asa disallows <% %>
+' script blocks (and therefore #include of lib/db.asp, which uses them), so
+' the delete logic is inlined rather than shared via DeleteSessionDatabase.
+' Only Application, Server, and Session are available in Session_OnEnd -
+' Request/Response are not.
+Sub Session_OnEnd
+	Dim dbPath, fso
+	dbPath = Session("DbPath")
+	If Not IsEmpty(dbPath) And Not IsNull(dbPath) And dbPath <> "" Then
+		Set fso = CreateObject("Scripting.FileSystemObject")
+		On Error Resume Next
+		If fso.FileExists(dbPath) Then
+			fso.DeleteFile dbPath, True
+		End If
+		On Error Goto 0
+	End If
+End Sub
+
+</script>

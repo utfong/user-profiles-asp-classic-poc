@@ -1,0 +1,9 @@
+# Per-session Access databases created at runtime by api/session.asp -
+# nothing here ships with the app by design (see both hosts' README).
+asp-vbscript/App_Data/sessions/*.accdb
+asp-jscript/App_Data/sessions/*.accdb
+
+# OS/editor cruft
+Thumbs.db
+desktop.ini
+.DS_Store

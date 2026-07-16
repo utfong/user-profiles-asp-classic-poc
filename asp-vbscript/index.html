@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profiles POC: ASP Classic (VBScript + Access)</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+	<header>
+		<h1>User Profiles</h1>
+		<p class="subtitle">ASP Classic (VBScript) API &middot; Microsoft Access storage &middot; plain HTML/CSS + axios frontend</p>
+	</header>
+
+	<main id="profilesSection">
+		<div id="sessionBanner" class="banner banner-inactive" role="status">
+			<span id="sessionBannerText">Checking session&hellip;</span>
+			<button id="btnCreateSession" type="button" class="hidden">Create Session</button>
+			<button id="btnEndSession" type="button" class="hidden secondary">End Session</button>
+		</div>
+
+		<div id="errorBanner" class="error hidden" role="alert"></div>
+
+		<div class="toolbar">
+			<h2>Profiles</h2>
+			<button id="btnNewProfile" type="button" disabled>New Profile</button>
+		</div>
+		<table id="profilesTable">
+			<thead>
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Email</th>
+					<th>Bio</th>
+					<th><span class="visually-hidden">Actions</span></th>
+				</tr>
+			</thead>
+			<tbody id="profilesBody">
+				<tr><td colspan="5" class="empty">Loading profiles&hellip;</td></tr>
+			</tbody>
+		</table>
+	</main>
+
+	<dialog id="profileDialog" aria-labelledby="profileDialogTitle">
+		<form id="profileForm" method="dialog">
+			<h2 id="profileDialogTitle">New Profile</h2>
+			<input type="hidden" id="profileId">
+			<label>
+				First Name
+				<input type="text" id="firstName" required maxlength="100">
+			</label>
+			<label>
+				Last Name
+				<input type="text" id="lastName" required maxlength="100">
+			</label>
+			<label>
+				Email
+				<input type="email" id="email" required maxlength="255">
+			</label>
+			<label>
+				Bio
+				<textarea id="bio" rows="3"></textarea>
+			</label>
+			<div class="dialog-actions">
+				<button type="button" id="btnCancelProfile" class="secondary">Cancel</button>
+				<button type="submit" id="btnSaveProfile">Save</button>
+			</div>
+		</form>
+	</dialog>
+
+	<dialog id="confirmDialog" aria-labelledby="confirmDialogTitle">
+		<h2 id="confirmDialogTitle">Delete Profile</h2>
+		<p id="confirmDialogMessage"></p>
+		<div class="dialog-actions">
+			<button type="button" id="btnConfirmCancel" class="secondary">Cancel</button>
+			<button type="button" id="btnConfirmDelete" class="danger">Delete</button>
+		</div>
+	</dialog>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios@1/dist/axios.min.js"></script>
+	<script src="assets/app.core.js"></script>
+	<script src="assets/app.js"></script>
+</body>
+</html>
