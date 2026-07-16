@@ -10,7 +10,7 @@ A proof of concept demonstrating a "modern" CRUD API pattern (real HTTP verbs, J
 - **Microsoft Access Database Engine 2016 Redistributable** ([ACE OLEDB 12.0](https://www.microsoft.com/en-us/download/details.aspx?id=54920)), installed with a bitness that **matches the app pool**. This host uses its own app pool, separate from `asp-vbscript`'s - confirm its bitness independently rather than assuming it matches.
 - The site's `.asp` handler mapping must allow `PUT` and `DELETE`, not just the IIS default `GET,HEAD,POST,DEBUG`. In IIS Manager: *Handler Mappings* → the ASP mapping (usually `ASPClassic`) → *Edit Feature Permissions*/*Request Restrictions* → *Verbs* tab → allow all verbs (or add `PUT,DELETE`).
 - The app pool identity needs write access to this folder (it creates `App_Data\sessions\` on first use).
-- **Run `jscript-engine-fix.cmd enable`** (repo root, needs an elevated Command Prompt) once. This machine (Windows 11 25H2) has a real JScript engine bug that intermittently 500s classic ASP requests without it - see [Known issues (resolved)](#known-issues-resolved) below.
+- **Run `jscript-engine-fix.ps1 enable`** (repo root, needs an elevated PowerShell prompt) once. This machine (Windows 11 25H2) has a real JScript engine bug that intermittently 500s classic ASP requests without it - see [Known issues (resolved)](#known-issues-resolved) below.
 
 ## Project structure
 
@@ -51,7 +51,7 @@ asp-jscript/
 4. Create/edit/delete profiles as usual.
 5. Click **End Session** (or leave it idle for ~5 minutes) to tear the database file down.
 
-If a request fails with a generic `500`, make sure `jscript-engine-fix.cmd enable` has been run (see Prerequisites) - see [Known issues (resolved)](#known-issues-resolved) below.
+If a request fails with a generic `500`, make sure `jscript-engine-fix.ps1 enable` has been run (see Prerequisites) - see [Known issues (resolved)](#known-issues-resolved) below.
 
 ## API reference
 
@@ -99,7 +99,7 @@ Visit `/tests/run.asp` (browser or any HTTP client) to run the full suite. It's 
 - `lib/db.asp` against a throwaway `.accdb`: schema, parameterized queries, `DATETIME`/`Date` marshaling, cleanup (in-process)
 - Full session + CRUD + CSRF-rejection flow over real HTTP (via `WinHttp.WinHttpRequest.5.1`, self-calling the live API - see [CLAUDE.md](CLAUDE.md) for why this host doesn't use `MSXML2.ServerXMLHTTP.6.0` like `asp-vbscript` does)
 
-`tests/run.asp` chains roughly a dozen sequential self-HTTP-calls within one script execution. With `jscript-engine-fix.cmd enable` applied (see Prerequisites), this reliably completes clean. As extra insurance regardless, `tests/api.tests.asp`'s `httpCall()` also automatically retries any *internal* self-call that looks like a crash (a `500` with an HTML body instead of the app's normal JSON envelope) up to 4 times before giving up - see [Known issues (resolved)](#known-issues-resolved) for why this belt-and-suspenders approach exists.
+`tests/run.asp` chains roughly a dozen sequential self-HTTP-calls within one script execution. With `jscript-engine-fix.ps1 enable` applied (see Prerequisites), this reliably completes clean. As extra insurance regardless, `tests/api.tests.asp`'s `httpCall()` also automatically retries any *internal* self-call that looks like a crash (a `500` with an HTML body instead of the app's normal JSON envelope) up to 4 times before giving up - see [Known issues (resolved)](#known-issues-resolved) for why this belt-and-suspenders approach exists.
 
 The response includes `X-Test-Status: pass|fail` and pass/fail count headers for scripted checks, e.g.:
 
@@ -131,7 +131,7 @@ Results render on the page and are also set as `data-a11y-status` on `<body>` (`
 
 **JScript engine crash on this machine (Windows 11 25H2) - fixed via a machine-level registry change.** Classic ASP pages under JScript intermittently failed with a `500` and an `ASP 0240 Script Engine Exception` (`A ScriptEngine threw exception 'C0000005' in 'IActiveScript::SetScriptState()' from 'CActiveScriptEngine::ReuseEngine()'`) - a real Microsoft regression (Windows 11 24H2/25H2 defaulting to a `jscript9legacy.dll` engine incompatible with classic ASP's script-engine-reuse model), not an application bug. `asp-vbscript` (same machine, VBScript instead) never showed it.
 
-**Fix:** `jscript-engine-fix.cmd enable` (repo root, needs an elevated prompt) sets `JScriptReplacement` (DWORD) = `0` under `HKLM\SOFTWARE\Policies\Microsoft\Internet Explorer\Main` and restarts IIS. This is a **machine-wide** setting (not scoped to IIS's worker process specifically), so it affects every JScript-using process on the machine, not just this site. Confirmed via repeated testing (40+ requests across multiple endpoints plus the full `tests/run.asp` suite) to resolve the crash entirely - 0 failures after enabling, versus ~50% before.
+**Fix:** `jscript-engine-fix.ps1 enable` (repo root, needs an elevated PowerShell prompt) sets `JScriptReplacement` (DWORD) = `0` under `HKLM\SOFTWARE\Policies\Microsoft\Internet Explorer\Main` and restarts IIS. This is a **machine-wide** setting (not scoped to IIS's worker process specifically), so it affects every JScript-using process on the machine, not just this site. Confirmed via repeated testing (40+ requests across multiple endpoints plus the full `tests/run.asp` suite) to resolve the crash entirely - 0 failures after enabling, versus ~50% before.
 
 Two other registry-based fixes were tried first and **did not work** (both left disabled) - `FEATURE_ENABLE_PERSISTENCE` (Microsoft's official, differently-targeted fix for a related-but-different "JScript globals don't persist" symptom) and `FEATURE_ENABLE_JSCRIPT9_LEGACY` (a per-process opt-out, lower-confidence source). Full investigation history, exact registry paths for all three attempts, and why the first two didn't pan out: see [CLAUDE.md](CLAUDE.md#the-intermittent-script-engine-crash---what-was-investigated-what-worked).
 

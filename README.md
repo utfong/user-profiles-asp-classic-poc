@@ -7,7 +7,7 @@ A sandbox for Classic ASP proofs of concept, one subfolder per IIS virtual host.
 | Host | Language | Status |
 |---|---|---|
 | [`asp-vbscript/`](asp-vbscript/README.md) | VBScript | Done: User Profiles CRUD API over a session-scoped Microsoft Access database, plain HTML/CSS + axios frontend, CSRF-protected writes, and a self-contained test suite. See its [README](asp-vbscript/README.md) for setup, the API reference, and how to run the tests. |
-| [`asp-jscript/`](asp-jscript/README.md) | JScript | Done: same User Profiles CRUD API, built as a genuine JScript port (not a syntax translation) rather than sharing code with `asp-vbscript`. Shares its frontend verbatim (backend-agnostic). Needs `jscript-engine-fix.cmd enable` (repo root) run once to work around a real Windows 11 25H2 JScript engine bug; see its [README](asp-jscript/README.md#known-issues-resolved) for details. |
+| [`asp-jscript/`](asp-jscript/README.md) | JScript | Done: same User Profiles CRUD API, built as a genuine JScript port (not a syntax translation) rather than sharing code with `asp-vbscript`. Shares its frontend verbatim (backend-agnostic). Needs `jscript-engine-fix.ps1 enable` (repo root) run once to work around a real Windows 11 25H2 JScript engine bug; see its [README](asp-jscript/README.md#known-issues-resolved) for details. |
 
 ## Setup
 
