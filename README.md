@@ -13,7 +13,7 @@ A sandbox for Classic ASP proofs of concept, one subfolder per IIS virtual host.
 
 Each host needs to be bound as its own IIS site/virtual host with the Classic ASP feature enabled. Host-specific prerequisites (database engine, handler mapping, etc.) are documented in that host's own README. Start there.
 
-`asp-classic.code-workspace` opens both folders together in VS Code.
+`user-profiles-asp-classic-poc.code-workspace` opens both folders together in VS Code.
 
 For AI assistants working in this repo: see [`CLAUDE.md`](CLAUDE.md) for environment gotchas discovered while building the vbscript host that will very likely resurface building others.
 

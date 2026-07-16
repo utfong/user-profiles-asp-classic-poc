@@ -1,4 +1,4 @@
-# CLAUDE.md: asp-classic
+# CLAUDE.md: user-profiles-asp-classic-poc
 
 This repo is a sandbox of Classic ASP proofs of concept, one subfolder per IIS virtual host:
 
